@@ -183,9 +183,13 @@ if __name__ == '__main__':
     model_names = args.model
     
     if isinstance(model_names, str):
-        model = torch.jit.load(args.model).to(args.device)
+        # LK modified
+        # model = torch.jit.load(args.model).to(args.device)
+        model = torch.jit.load(args.model)
     elif isinstance(model_names, list):
-        models = [torch.jit.load(m).to(args.device) for m in model_names]
+        # LK modified
+        # models = [torch.jit.load(m).to(args.device) for m in model_names]
+        models = [torch.jit.load(m) for m in model_names]
         model = AveragingModel(models)
     else:
         print("Error during model loading.")
