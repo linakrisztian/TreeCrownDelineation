@@ -77,7 +77,7 @@ class InMemoryDataModule(pl.LightningDataModule):
             self.rasters = np.sort(glob.glob(os.path.abspath(rasters) + "/*.tif"))
 
         if type(targets[0]) in (list, tuple, np.ndarray):
-            self.targets = [np.sort(file_list) for file_list in targets]
+            self.targets = [np.array(file_list) for file_list in targets] # [np.sort(file_list) for file_list in targets]
         else:
             self.targets = [np.sort(glob.glob(os.path.abspath(file_list) + "/*.tif")) for file_list in targets]
 
