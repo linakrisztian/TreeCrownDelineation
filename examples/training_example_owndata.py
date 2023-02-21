@@ -16,10 +16,10 @@ from treecrowndelineation.dataloading.in_memory_datamodule import InMemoryDataMo
 ###################################
 
 # path to data-directory, with folder structure as mentioned in README.md (subdirectories: tiles, masks, outlines, dist_trafo)
-path_to_datadir = '/home/lkrisztian/data/rvr_baumerkennung/own_training_data/data_vs1/'
-logdir = '/home/lkrisztian/data/rvr_baumerkennung/own_training_data/test'
-model_save_path = '/home/lkrisztian/data/rvr_baumerkennung/own_training_data/test'
-experiment_name = 'test_exp'
+path_to_datadir = 'path/to/data'
+logdir = ''
+model_save_path = ''
+experiment_name = ''
 # number of channels includes NDVI if set True below
 # thus for rgb-nir-tifs in_channel=5
 # for rgb-nir-ndom-tifs in_channel=6 
