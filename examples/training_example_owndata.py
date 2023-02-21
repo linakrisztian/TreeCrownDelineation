@@ -14,24 +14,42 @@ from treecrowndelineation.dataloading.in_memory_datamodule import InMemoryDataMo
 ###################################
 #      file paths and settings    #
 ###################################
-rasters = []
-masks = []
-outlines = []
-dist = []
-for i in range(39):
-    rasters.append(f"training_owndata/data_vs1/tiles/TOM_378000_5711000_tile_{i}.tif")
-    masks.append(f"training_owndata/data_vs1/masks/mask_{i}.tif")
-    outlines.append(f"training_owndata/data_vs1/outlines/outline_{i}.tif")
-    dist.append(f"training_owndata/data_vs1/dist_trafo/dist_trafo_{i}.tif")
 
-logdir = "training_owndata/vs1"
-model_save_path = "training_owndata/vs1"
-experiment_name = "vs1_geomorpho_training_data"
+# path to data-directory, with folder structure as mentioned in README.md (subdirectories: tiles, masks, outlines, dist_trafo)
+path_to_datadir = '/home/lkrisztian/data/rvr_baumerkennung/own_training_data/data_vs1/'
+logdir = '/home/lkrisztian/data/rvr_baumerkennung/own_training_data/test'
+model_save_path = '/home/lkrisztian/data/rvr_baumerkennung/own_training_data/test'
+experiment_name = 'test_exp'
+# number of channels includes NDVI if set True below
+# thus for rgb-nir-tifs in_channel=5
+# for rgb-nir-ndom-tifs in_channel=6 
+in_channels = 5  
+
+################################
+
+#grab last characters of the file name to sort them equally in all lists
+def last_chars(x):
+    return(x.split('_')[-1])
+
+rasters_filename = os.listdir(os.path.join(path_to_datadir,'tiles'))
+rasters = [os.path.join(path_to_datadir,'tiles',el) for el in rasters_filename]
+rasters = sorted(rasters, key=last_chars)
+
+masks_filename = os.listdir(os.path.join(path_to_datadir,'masks'))
+masks = [os.path.join(path_to_datadir,'masks',el) for el in masks_filename]
+masks = sorted(masks, key=last_chars)
+
+outlines_filename = os.listdir(os.path.join(path_to_datadir,'outlines'))
+outlines = [os.path.join(path_to_datadir,'outlines',el) for el in outlines_filename]
+outlines = sorted(outlines, key=last_chars)
+
+dist_filename = os.listdir(os.path.join(path_to_datadir,'dist_trafo'))
+dist = [os.path.join(path_to_datadir,'dist_trafo',el) for el in dist_filename]
+dist = sorted(dist, key=last_chars)
 
 arch = "Unet-resnet18"
 width = 256
 batchsize = 16
-in_channels = 5  # number of channels includes NDVI if set True below
 cpus = 1  # 2
 backend = "dp"
 max_epochs = 30 + 60 - 1
@@ -91,7 +109,8 @@ trainer = Trainer(#fast_dev_run=True,
                   logger=logger,
                   callbacks=callbacks,
                   # checkpoint_callback=False,  # set this to avoid logging into the working directory
-                  max_epochs=max_epochs)
+                  max_epochs=max_epochs,
+                  log_every_n_steps=20)
 trainer.fit(model, data)
 
 #%%
