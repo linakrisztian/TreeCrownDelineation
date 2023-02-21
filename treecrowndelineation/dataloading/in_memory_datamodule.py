@@ -77,7 +77,7 @@ class InMemoryDataModule(pl.LightningDataModule):
             self.rasters = np.sort(glob.glob(os.path.abspath(rasters) + "/*.tif"))
 
         if type(targets[0]) in (list, tuple, np.ndarray):
-            self.targets = [np.sort(file_list) for file_list in targets]
+            self.targets = [np.array(file_list) for file_list in targets] # [np.sort(file_list) for file_list in targets]
         else:
             self.targets = [np.sort(glob.glob(os.path.abspath(file_list) + "/*.tif")) for file_list in targets]
 
@@ -102,7 +102,7 @@ class InMemoryDataModule(pl.LightningDataModule):
         self.val_ds = None
         self.rescale_ndvi = rescale_ndvi
 
-    def setup(self, unused=0):  # throws error if arg is removed
+    def setup(self, stage, unused=0):  # throws error if arg is removed
         if self.shuffle:
             for x in (self.rasters, *self.targets):
                 if self.deterministic:

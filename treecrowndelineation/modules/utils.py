@@ -635,7 +635,9 @@ def predict_on_array_cf(model,
                 batch[j] = next(patch_gen)
 
             with torch.no_grad():
-                prediction = model(torch.from_numpy(batch).to(device=device, dtype=torch.float32))
+                # LK modified
+                # prediction = model(torch.from_numpy(batch).to(device=device, dtype=torch.float32))
+                prediction = model(torch.from_numpy(batch))
                 if aggregate_metric:
                     metric += prediction[1].cpu().numpy()
                     prediction = prediction[0]
